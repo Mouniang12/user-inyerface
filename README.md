@@ -1,4 +1,4 @@
-##User In Yer Face – Refonte UX/UI
+## User In Yer Face – Refonte UX/UI
 
 Le projet consiste à revisiter le site expérimental userinyerface.com, une plateforme volontairement conçue pour accumuler les pires pratiques en matière d’UX/UI. L’objectif de cette refonte est de transformer cette expérience frustrante en une interface réellement centrée sur l’utilisateur, en appliquant les principes fondamentaux du User-Centered Design. Là où le site original cherche à piéger, dérouter et provoquer, cette nouvelle version vise au contraire à guider, clarifier et accompagner.
 
