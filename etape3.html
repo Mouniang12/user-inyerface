@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Inyerface - Step 3</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', Arial, sans-serif;
+            background: #1e5fd9;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem;
+            color: white;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .logo {
+            font-size: 4rem;
+            font-weight: 700;
+            letter-spacing: -0.05em;
+            line-height: 1;
+            margin-bottom: 0.5rem;
+        }
+
+        .site-title {
+            font-size: 1.8rem;
+            font-weight: 400;
+            margin-bottom: 1.5rem;
+        }
+
+        .timer {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            letter-spacing: 0.1em;
+        }
+
+        .progress-steps {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            justify-content: center;
+        }
+
+        .step {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .step.completed {
+            background: #22c55e;
+            color: white;
+        }
+
+        .step.active {
+            background: #4ade80;
+            color: white;
+            box-shadow: 0 0 20px rgba(74, 222, 128, 0.5);
+        }
+
+        .step.pending {
+            background: rgba(255, 255, 255, 0.3);
+            color: white;
+        }
+
+        .form-container {
+            background: white;
+            border-radius: 16px;
+            padding: 2.5rem;
+            max-width: 700px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .form-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .form-step {
+            color: #6b7280;
+            font-size: 0.95rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #1f2937;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #374151;
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .required {
+            color: #ef4444;
+            margin-left: 0.25rem;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="date"],
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+            color: #1f2937;
+        }
+
+        input:focus,
+        select:focus {
+            outline: none;
+            border-color: #1e5fd9;
+            box-shadow: 0 0 0 3px rgba(30, 95, 217, 0.1);
+        }
+
+        input::placeholder {
+            color: #9ca3af;
+        }
+
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            cursor: pointer;
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .radio-option {
+            flex: 1;
+            position: relative;
+        }
+
+        .radio-option input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .radio-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-weight: 500;
+            color: #6b7280;
+        }
+
+        .radio-option input[type="radio"]:checked + .radio-label {
+            border-color: #1e5fd9;
+            background: #eff6ff;
+            color: #1e5fd9;
+        }
+
+        .radio-label:hover {
+            border-color: #1e5fd9;
+            background: #f9fafb;
+        }
+
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            opacity: 1;
+        }
+
+        .input-hint {
+            font-size: 0.85rem;
+            color: #6b7280;
+            margin-top: 0.35rem;
+        }
+
+        /* CORRECTION :  dans le bon ordre */
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        button {
+            flex: 1;
+            padding: 0.875rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-secondary {
+            background: #f3f4f6;
+            color: #6b7280;
+        }
+
+        .btn-secondary:hover {
+            background: #e5e7eb;
+        }
+
+        .btn-primary {
+            background: #1e5fd9;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #1e40af;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(30, 95, 217, 0.3);
+        }
+
+        .btn-primary:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .footer {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            font-size: 0.9rem;
+            color: white;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .button-group {
+                flex-direction: column-reverse;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">UI</div>
+        <div class="site-title">User Inyerface</div>
+        <div class="timer" id="timer"><script>localStorage.getItem(timeElapsed)</script></div>
+        
+        <div class="progress-steps">
+            <div class="step completed">1</div>
+            <div class="step completed">2</div>
+            <div class="step active">3</div>
+            <div class="step pending">4</div>
+        </div>
+    </div>
+
+    <div class="form-container">
+        <div class="form-header">
+            <div class="form-step">Step 3 / 4</div>
+            <div class="form-title">Personal details</div>
+        </div>
+
+        <form id="personalForm">
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="title">
+                        Title <span class="required">*</span>
+                    </label>
+                    <select id="title" name="title" required>
+                        <option value="">Select a title</option>
+                        <option value="mr">Mr</option>
+                        <option value="ms">Ms</option>
+                        <option value="mrs">Mrs</option>
+                        <option value="mx">Mx</option>
+                        <option value="dr">Dr</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        Gender <span class="required">*</span>
+                    </label>
+                    <div class="radio-group">
+                        <div class="radio-option">
+                            <input type="radio" id="male" name="gender" value="male" required>
+                            <label for="male" class="radio-label">Male</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="female" name="gender" value="female">
+                            <label for="female" class="radio-label">Female</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="other" name="gender" value="other">
+                            <label for="other" class="radio-label">Other</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="firstName">
+                        First name <span class="required">*</span>
+                    </label>
+                    <input 
+                        type="text" 
+                        id="firstName" 
+                        name="firstName" 
+                        placeholder="John"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="surname">
+                        Surname <span class="required">*</span>
+                    </label>
+                    <input 
+                        type="text" 
+                        id="surname" 
+                        name="surname" 
+                        placeholder="Smith"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="birthdate">
+                        Birthdate <span class="required">*</span>
+                    </label>
+                    <input 
+                        type="date" 
+                        id="birthdate" 
+                        name="birthdate"
+                        required
+                    >
+                    <span class="input-hint">Format: MM/DD/YYYY</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="age">
+                        Age <span class="required">*</span>
+                    </label>
+                    <input 
+                        type="number" 
+                        id="age" 
+                        name="age" 
+                        min="0" 
+                        max="120"
+                        placeholder="25"
+                        required
+                    >
+                </div>
+
+                <div class="form-group full-width">
+                    <label for="street">
+                        Street address <span class="required">*</span>
+                    </label>
+                    <input 
+                        type="text" 
+                        id="street" 
+                        name="street" 
+                        placeholder="123 Main Street"
+                        required
+                    >
+                </div>
+
+               <div class="form-group">
+                    <label for="number">
+                        House / Apt number <span class="required">*</span>
+                    </label>
+                    <input 
+                        type="text" 
+                        id="number" 
+                        name="number" 
+                        placeholder="Apt 4B"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="box">
+                        Box (optional)
+                    </label>
+                    <input 
+                        type="text" 
+                        id="box" 
+                        name="box" 
+                        placeholder="Box 12"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="city">
+                        City <span class="required">*</span>
+                    </label>
+                    <input 
+                        type="text" 
+                        id="city" 
+                        name="city" 
+                        placeholder="New York"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="zip">
+                        Zip / Postal code <span class="required">*</span>
+                    </label>
+                    <input 
+                        type="text" 
+                        id="zip" 
+                        name="zip" 
+                        placeholder="10001"
+                        required
+                    >
+                </div>
+
+                <div class="form-group full-width">
+                    <label for="country">
+                        Country <span class="required">*</span>
+                    </label>
+                    <select id="country" name="country" required>
+                        <option value="">Select a country</option>
+                        <option value="us">United States</option>
+                        <option value="uk">United Kingdom</option>
+                        <option value="ca">Canada</option>
+                        <option value="au">Australia</option>
+                        <option value="de">Germany</option>
+                        <option value="fr">France</option>
+                        <option value="es">Spain</option>
+                        <option value="it">Italy</option>
+                        <option value="nl">Netherlands</option>
+                        <option value="be">Belgium</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="button-group">
+                <button type="button" class="btn-secondary" onclick="goBack()">
+                    ← Back
+                </button>
+                <button type="submit" class="btn-primary">
+                    Next →
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <div class="footer">
+        VERHAERT | DIGITAL INNOVATION
+    </div>
+
+    <script>
+        let seconds = parseInt(localStorage.getItem('timeElapsed')) || 0; // Récupère le temps sauvegardé ou commence à 0
+        const timerElement = document.getElementById('timer');
+
+        setInterval(() => {
+            seconds++;
+            const hours = Math.floor(seconds / 3600);
+            const minutes = Math.floor((seconds % 3600) / 60);
+            const secs = seconds % 60;
+            timerElement.textContent = 
+                `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        }, 1000);
+
+        document.getElementById('birthdate').addEventListener('change', function() {
+            const birthdate = new Date(this.value);
+            const today = new Date();
+            let age = today.getFullYear() - birthdate.getFullYear();
+            const monthDiff = today.getMonth() - birthdate.getMonth();
+            
+            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthdate.getDate())) {
+                age--;
+            }
+            
+            if (age >= 0 && age <= 120) {
+                document.getElementById('age').value = age;
+            }
+        });
+
+        document.getElementById('personalForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Personal details complete! Moving to step 4...');
+            localStorage.setItem('timeElapsed', seconds);
+            window.location.href = 'etape3.html'
+        });
+
+        function goBack() {
+            window.location.href = 'etape2.html'        }
+    </script>
+</body>
+</html>

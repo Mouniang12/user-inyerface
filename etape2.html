@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Inyerface - Step 2</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', Arial, sans-serif;
+            background: #1e5fd9;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem;
+            color: white;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .logo {
+            font-size: 4rem;
+            font-weight: 700;
+            letter-spacing: -0.05em;
+            line-height: 1;
+            margin-bottom: 0.5rem;
+        }
+
+        .site-title {
+            font-size: 1.8rem;
+            font-weight: 400;
+            margin-bottom: 1.5rem;
+        }
+
+        .timer {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            letter-spacing: 0.1em;
+        }
+
+        .progress-steps {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            justify-content: center;
+        }
+
+        .step {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .step.completed {
+            background: #22c55e;
+            color: white;
+        }
+
+        .step.active {
+            background: #4ade80;
+            color: white;
+            box-shadow: 0 0 20px rgba(74, 222, 128, 0.5);
+        }
+
+        .step.pending {
+            background: rgba(255, 255, 255, 0.3);
+            color: white;
+        }
+
+        .form-container {
+            background: white;
+            border-radius: 16px;
+            padding: 2.5rem;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .form-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: #1f2937;
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        .section {
+            margin-bottom: 2.5rem;
+        }
+
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 1rem;
+        }
+
+        .upload-section {
+            display: flex;
+            gap: 1.5rem;
+            align-items: flex-start;
+            padding: 1.5rem;
+            background: #f9fafb;
+            border-radius: 12px;
+            border: 2px dashed #d1d5db;
+        }
+
+        .avatar-preview {
+            width: 120px;
+            height: 120px;
+            border-radius: 12px;
+            background: #e5e7eb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .avatar-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .avatar-placeholder {
+            font-size: 3rem;
+            color: #9ca3af;
+        }
+
+        .upload-content {
+            flex: 1;
+        }
+
+        .upload-title {
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 0.5rem;
+        }
+
+        .upload-description {
+            font-size: 0.9rem;
+            color: #6b7280;
+            margin-bottom: 1rem;
+        }
+
+        .upload-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: #1e5fd9;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .upload-button:hover {
+            background: #1e40af;
+            transform: translateY(-1px);
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .interests-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .selection-counter {
+            font-size: 0.9rem;
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        .selection-counter.complete {
+            color: #22c55e;
+        }
+
+        .selection-counter.error {
+            color: #ef4444;
+        }
+
+        .selection-actions {
+            display: flex;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .action-button {
+            padding: 0.5rem 1rem;
+            background: #f3f4f6;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #374151;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .action-button:hover {
+            background: #e5e7eb;
+            border-color: #9ca3af;
+        }
+
+        .interests-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 0.75rem;
+        }
+
+        .interest-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem;
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .interest-item:hover {
+            border-color: #1e5fd9;
+            background: #eff6ff;
+        }
+
+        .interest-item.selected {
+            border-color: #1e5fd9;
+            background: #eff6ff;
+        }
+
+        .interest-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: #1e5fd9;
+        }
+
+        .interest-item label {
+            cursor: pointer;
+            font-size: 0.9rem;
+            color: #374151;
+            font-weight: 500;
+        }
+
+        .error-message {
+            color: #ef4444;
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        button {
+            flex: 1;
+            padding: 0.875rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-secondary {
+            background: #f3f4f6;
+            color: #6b7280;
+        }
+
+        .btn-secondary:hover {
+            background: #e5e7eb;
+        }
+
+        .btn-primary {
+            background: #1e5fd9;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #1e40af;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(30, 95, 217, 0.3);
+        }
+
+        .btn-primary:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .footer {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            font-size: 0.9rem;
+            color: white;
+            font-weight: 600;
+        }
+
+        @media (max-width: 640px) {
+            .upload-section {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .interests-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .button-group {
+                flex-direction: column-reverse;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">UI</div>
+        <div class="site-title">User Inyerface</div>
+        <div class="timer" id="timer"><script>localStorage.getItem(timeElapsed)</script></div>
+        
+        <div class="progress-steps">
+            <div class="step completed">1</div>
+            <div class="step active">2</div>
+            <div class="step pending">3</div>
+            <div class="step pending">4</div>
+        </div>
+    </div>
+
+    <div class="form-container">
+        <div class="form-header">2 / 4</div>
+
+        <form id="profileForm">
+            <div class="section">
+                <div class="section-title">This is me</div>
+                <div class="upload-section">
+                    <div class="avatar-preview" id="avatarPreview">
+                        <span class="avatar-placeholder">👤</span>
+                    </div>
+                    <div class="upload-content">
+                        <div class="upload-title">Profile picture</div>
+                        <div class="upload-description">
+                            To complete your profile, please upload an image
+                        </div>
+                        <label for="fileInput" class="upload-button">
+                            📤 Upload image
+                        </label>
+                        <input type="file" id="fileInput" accept="image/*">
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="interests-header">
+                    <div class="section-title">Choose 3 interests</div>
+                    <div class="selection-counter" id="counter">
+                        <span id="selectedCount">0</span> / 3 selected
+                    </div>
+                </div>
+
+                <div class="selection-actions">
+                    <button type="button" class="action-button" onclick="selectAll()">
+                        ✓ Select all
+                    </button>
+                    <button type="button" class="action-button" onclick="unselectAll()">
+                        ✕ Unselect all
+                    </button>
+                </div>
+
+                <div class="interests-grid" id="interestsGrid">
+                    <div class="interest-item" onclick="toggleInterest(this)">
+                        <input type="checkbox" id="music" name="interests" value="music">
+                        <label for="music">Music</label>
+                    </div>
+                    <div class="interest-item" onclick="toggleInterest(this)">
+                        <input type="checkbox" id="sports" name="interests" value="sports">
+                        <label for="sports">Sports</label>
+                    </div>
+                    <div class="interest-item" onclick="toggleInterest(this)">
+                        <input type="checkbox" id="travel" name="interests" value="travel">
+                        <label for="travel">Travel</label>
+                    </div>
+                    <div class="interest-item" onclick="toggleInterest(this)">
+                        <input type="checkbox" id="reading" name="interests" value="reading">
+                        <label for="reading">Reading</label>
+                    </div>
+                    <div class="interest-item" onclick="toggleInterest(this)">
+                        <input type="checkbox" id="cooking" name="interests" value="cooking">
+                        <label for="cooking">Cooking</label>
+                    </div>
+                    <div class="interest-item" onclick="toggleInterest(this)">
+                        <input type="checkbox" id="technology" name="interests" value="technology">
+                        <label for="technology">Technology</label>
+                    </div>
+                    <div class="interest-item" onclick="toggleInterest(this)">
+                        <input type="checkbox" id="art" name="interests" value="art">
+                        <label for="art">Art</label>
+                    </div>
+                    <div class="interest-item" onclick="toggleInterest(this)">
+                        <input type="checkbox" id="movies" name="interests" value="movies">
+                        <label for="movies">Movies</label>
+                    </div>
+                    <div class="interest-item" onclick="toggleInterest(this)">
+                        <input type="checkbox" id="gaming" name="interests" value="gaming">
+                        <label for="gaming">Gaming</label>
+                    </div>
+                    <div class="interest-item" onclick="toggleInterest(this)">
+                        <input type="checkbox" id="photography" name="interests" value="photography">
+                        <label for="photography">Photography</label>
+                    </div>
+                    <div class="interest-item" onclick="toggleInterest(this)">
+                        <input type="checkbox" id="fashion" name="interests" value="fashion">
+                        <label for="fashion">Fashion</label>
+                    </div>
+                    <div class="interest-item" onclick="toggleInterest(this)">
+                        <input type="checkbox" id="fitness" name="interests" value="fitness">
+                        <label for="fitness">Fitness</label>
+                    </div>
+                </div>
+
+                <div class="error-message" id="errorMessage">
+                    Please select exactly 3 interests
+                </div>
+            </div>
+
+            <div class="button-group">
+                <button type="button" class="btn-secondary" onclick="goBack()">
+                    ← Back
+                </button>
+                <button type="submit" class="btn-primary" id="nextBtn">
+                    Next →
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <div class="footer">
+        VERHAERT | DIGITAL INNOVATION
+    </div>
+
+    <script>
+       
+        let seconds = parseInt(localStorage.getItem('timeElapsed')) || 0; // Récupère le temps sauvegardé ou commence à 0
+        const timerElement = document.getElementById('timer');
+
+        setInterval(() => {
+            seconds++;
+            const hours = Math.floor(seconds / 3600);
+            const minutes = Math.floor((seconds % 3600) / 60);
+            const secs = seconds % 60;
+            timerElement.textContent = 
+                `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        }, 1000);
+
+        document.getElementById('fileInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    const img = document.createElement('img');
+                    img.src = event.target.result;
+                    document.getElementById('avatarPreview').innerHTML = '';
+                    document.getElementById('avatarPreview').appendChild(img);
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        function toggleInterest(element) {
+            const checkbox = element.querySelector('input[type="checkbox"]');
+            const selectedCount = document.querySelectorAll('input[name="interests"]:checked').length;
+            
+            if (!checkbox.checked && selectedCount >= 3) {
+                document.getElementById('errorMessage').classList.add('show');
+                setTimeout(() => {
+                    document.getElementById('errorMessage').classList.remove('show');
+                }, 2000);
+                return;
+            }
+            
+            checkbox.checked = !checkbox.checked;
+            if (checkbox.checked) {
+                element.classList.add('selected');
+            } else {
+                element.classList.remove('selected');
+            }
+            
+            updateCounter();
+        }
+
+        function updateCounter() {
+            const selected = document.querySelectorAll('input[name="interests"]:checked').length;
+            document.getElementById('selectedCount').textContent = selected;
+            
+            const counter = document.getElementById('counter');
+            counter.classList.remove('complete', 'error');
+            
+            if (selected === 3) {
+                counter.classList.add('complete');
+            } else if (selected > 3) {
+                counter.classList.add('error');
+            }
+        }
+
+        function selectAll() {
+            const checkboxes = document.querySelectorAll('input[name="interests"]');
+            checkboxes.forEach((checkbox, index) => {
+                    checkbox.checked = true;
+                    checkbox.parentElement.classList.add('selected');
+            });
+            updateCounter();
+        }
+
+        function unselectAll() {
+            const checkboxes = document.querySelectorAll('input[name="interests"]');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = false;
+                checkbox.parentElement.classList.remove('selected');
+            });
+            updateCounter();
+        }
+
+        document.getElementById('profileForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const selected = document.querySelectorAll('input[name="interests"]:checked').length;
+            
+            if (selected !== 3) {
+                document.getElementById('errorMessage').classList.add('show');
+                return;
+            }
+            
+            alert('Profile complete! Moving to step 3...');
+            localStorage.setItem('timeElapsed', seconds);
+            window.location.href = 'etape3.html'
+        });
+
+        function goBack() {
+            window.location.href = 'etape1.html'
+        }
+    </script>
+</body>
+</html>
